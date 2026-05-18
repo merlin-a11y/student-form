@@ -470,81 +470,7 @@
 
   .btn-reset:hover { background: var(--blue); transform: translateY(-1px); }
 
-  /* Setup notice */
-  .setup-notice {
-    background: #FFF8E1;
-    border: 2px solid #FFD54F;
-    border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 20px;
-    position: relative; z-index: 1;
-    max-width: 560px;
-    margin-left: auto;
-    margin-right: auto;
-    animation: slideUp 0.7s ease-out 0.4s both;
-  }
-
-  .setup-notice h3 {
-    color: #E65100;
-    font-size: 15px;
-    font-weight: 700;
-    margin-bottom: 10px;
-    display: flex; align-items: center; gap: 6px;
-  }
-
-  .setup-notice ol {
-    padding-left: 18px;
-    color: #5D4037;
-    font-size: 13px;
-    line-height: 2;
-  }
-
-  .setup-notice code {
-    background: rgba(0,0,0,0.08);
-    padding: 1px 6px;
-    border-radius: 4px;
-    font-size: 12px;
-    word-break: break-all;
-  }
-
-  .url-input-wrap {
-    margin-top: 12px;
-    display: flex;
-    gap: 8px;
-  }
-
-  .url-input-wrap input {
-    flex: 1;
-    padding: 9px 12px;
-    border: 2px solid #FFD54F;
-    border-radius: 8px;
-    font-size: 13px;
-    font-family: 'Sarabun', sans-serif;
-    outline: none;
-  }
-
-  .url-input-wrap input:focus { border-color: var(--orange); }
-
-  .btn-save-url {
-    padding: 9px 16px;
-    background: var(--orange);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-family: 'Sarabun', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    white-space: nowrap;
-  }
-
-  .url-saved {
-    color: #2E7D32;
-    font-size: 13px;
-    font-weight: 700;
-    margin-top: 8px;
-    display: none;
-  }
+  
 
   @media (max-width: 480px) {
     .card-body { padding: 20px 16px 24px; }
@@ -569,24 +495,6 @@
   </div>
   <h1>📋 สำรวจข้อมูลนักเรียน<br>ภาคเรียนที่ 1 ปีการศึกษา 2569</h1>
   <p>กรุณากรอกข้อมูลให้ครบถ้วนและถูกต้อง</p>
-</div>
-
-<!-- Setup Notice -->
-<div class="setup-notice" id="setupNotice">
-  <h3>⚙️ ตั้งค่าก่อนใช้งาน (ครู/ผู้ดูแลระบบ)</h3>
-  <ol>
-    <li>เปิด <strong>Google Sheets</strong> แล้วสร้างชีทใหม่</li>
-    <li>ไปที่เมนู <strong>ส่วนขยาย → Apps Script</strong></li>
-    <li>วางโค้ด Apps Script จากไฟล์ <code>apps-script.gs</code> ที่แนบมา</li>
-    <li>กด <strong>Deploy → New deployment → Web app</strong></li>
-    <li>ตั้ง "Execute as" = <strong>Me</strong> และ "Who has access" = <strong>Anyone</strong></li>
-    <li>กด Deploy แล้ว <strong>คัดลอก URL</strong> มาวางด้านล่างนี้</li>
-  </ol>
-  <div class="url-input-wrap">
-    <input type="url" id="scriptUrlInput" placeholder="วาง Web App URL ที่นี่...">
-    <button class="btn-save-url" onclick="saveScriptUrl()">บันทึก</button>
-  </div>
-  <div class="url-saved" id="urlSaved">✅ บันทึก URL เรียบร้อยแล้ว! แบบฟอร์มพร้อมใช้งาน</div>
 </div>
 
 <!-- Main Card -->
@@ -796,24 +704,11 @@ const students = {
 };
 
 // ===== Script URL Management =====
-let SCRIPT_URL = localStorage.getItem('mitrapanya_script_url') || '';
+let SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzKN7HaMrg5Lzk9bzg5MZafxsjpqA0pQpKc7vORfrSS6vd4184smvFLDfy8ZqMIoRXWuA/exec';
 
-function saveScriptUrl() {
-  const url = document.getElementById('scriptUrlInput').value.trim();
-  if (!url.startsWith('https://')) { alert('URL ต้องขึ้นต้นด้วย https://'); return; }
-  SCRIPT_URL = url;
-  localStorage.setItem('mitrapanya_script_url', url);
-  document.getElementById('urlSaved').style.display = 'block';
-  setTimeout(() => document.getElementById('setupNotice').style.display = 'none', 1500);
-}
 
-// Auto-load saved URL
-window.addEventListener('DOMContentLoaded', () => {
-  if (SCRIPT_URL) {
-    document.getElementById('scriptUrlInput').value = SCRIPT_URL;
-    document.getElementById('setupNotice').style.display = 'none';
-  }
-});
+
+
 
 // ===== Step navigation =====
 let currentStep = 1;
@@ -941,11 +836,7 @@ function calcBMI() {
 async function submitForm() {
   if (!validateStep(3)) return;
 
-  if (!SCRIPT_URL) {
-    document.getElementById('setupNotice').style.display = 'block';
-    alert('⚠️ กรุณาตั้งค่า Web App URL ก่อนส่งข้อมูล\n(ดูกล่องสีเหลืองด้านบน)');
-    return;
-  }
+
 
   const btn = document.getElementById('submitBtn');
   btn.disabled = true;
